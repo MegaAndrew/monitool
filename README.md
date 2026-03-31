@@ -1,10 +1,10 @@
-# ScriptMan — Quick Start
+# monitool — Quick Start
 
 ## Files
-- `scriptman.py`          — the entire application (single file)
+- `monitool.py`          — the entire application (single file)
 - `scripts.json`          — your script definitions + auth config
-- `scriptman.nginx.conf`  — nginx reverse proxy config
-- `scriptman.service`     — optional systemd unit to run as a service
+- `monitool.nginx.conf`  — nginx reverse proxy config
+- `monitool.service`     — optional systemd unit to run as a service
 
 ---
 
@@ -50,15 +50,15 @@ Paste the result into `scripts.json` → `auth.password_hash`.
 ## 4. Run
 
 ```bash
-python3 scriptman.py
+python3 monitool.py
 ```
 
 Environment variable overrides:
 ```
-SCRIPTMAN_CONFIG=scripts.json   # config file path
-SCRIPTMAN_HOST=127.0.0.1        # bind host (keep 127.0.0.1 behind nginx)
-SCRIPTMAN_PORT=7000             # port
-SCRIPTMAN_SECRET=<hex>          # Flask secret key (auto-generated if unset)
+MONITOOL_CONFIG=scripts.json   # config file path
+MONITOOL_HOST=127.0.0.1        # bind host (keep 127.0.0.1 behind nginx)
+MONITOOL_PORT=7000             # port
+MONITOOL_SECRET=<hex>          # Flask secret key (auto-generated if unset)
 ```
 
 ---
@@ -66,8 +66,8 @@ SCRIPTMAN_SECRET=<hex>          # Flask secret key (auto-generated if unset)
 ## 5. Nginx
 
 ```bash
-sudo cp scriptman.nginx.conf /etc/nginx/sites-available/scriptman
-sudo ln -s /etc/nginx/sites-available/scriptman /etc/nginx/sites-enabled/
+sudo cp monitool.nginx.conf /etc/nginx/sites-available/monitool
+sudo ln -s /etc/nginx/sites-available/monitool /etc/nginx/sites-enabled/
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
@@ -83,10 +83,10 @@ sudo certbot --nginx -d your-domain.com
 ## 6. Run as a systemd service (optional)
 
 ```bash
-sudo cp scriptman.service /etc/systemd/system/
+sudo cp monitool.service /etc/systemd/system/
 sudo systemctl daemon-reload
-sudo systemctl enable --now scriptman
-sudo journalctl -fu scriptman
+sudo systemctl enable --now monitool
+sudo journalctl -fu monitool
 ```
 
 ---
@@ -99,4 +99,4 @@ sudo journalctl -fu scriptman
 - **Auto-restart** on exit (per-script flag)
 - **Session-based auth** with hashed password
 - **Zero JS build step** — plain HTML+JS embedded in Python
-- **Single file** — `scriptman.py` is everything
+- **Single file** — `monitool.py` is everything

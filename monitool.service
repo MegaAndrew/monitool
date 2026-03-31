@@ -1,0 +1,23 @@
+[Unit]
+Description=Monitool - Shell Script Managing And Monitoring
+After=network.target
+
+[Service]
+Type=simple
+User=www-data                          # change to your user
+WorkingDirectory=/opt/monitool        # directory with monitool.py + scripts.json
+ExecStart=/usr/bin/python3 monitool.py
+Restart=on-failure
+RestartSec=5s
+
+Environment=MONITOOL_HOST=127.0.0.1
+Environment=MONITOOL_PORT=7000
+Environment=MONITOOL_CONFIG=/opt/monitool/scripts.json
+# Generate once and hardcode: python3 -c "import secrets; print(secrets.token_hex(32))"
+Environment=MONITOOL_SECRET=REPLACE_WITH_RANDOM_HEX
+
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
