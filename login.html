@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>ScriptMan — Login</title>
+        <style>
+            @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap");
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            :root {
+                --bg: #0a0c0e;
+                --panel: #111416;
+                --border: #1e2428;
+                --green: #00e676;
+                --green-dim: #00c853;
+                --text: #cdd9e5;
+                --muted: #546070;
+                --red: #ff5252;
+            }
+            body {
+                background: var(--bg);
+                color: var(--text);
+                font-family: "IBM Plex Mono", monospace;
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            body::before {
+                content: "";
+                position: fixed;
+                inset: 0;
+                background: repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 230, 118, 0.015) 2px,
+                    rgba(0, 230, 118, 0.015) 4px
+                );
+                pointer-events: none;
+            }
+            .wrap {
+                width: 360px;
+            }
+            .logo {
+                text-align: center;
+                margin-bottom: 40px;
+            }
+            .logo-mark {
+                font-size: 28px;
+                font-weight: 600;
+                color: var(--green);
+                letter-spacing: -1px;
+            }
+            .logo-mark span {
+                color: var(--muted);
+            }
+            .logo-sub {
+                font-size: 11px;
+                color: var(--muted);
+                margin-top: 4px;
+                letter-spacing: 2px;
+                text-transform: uppercase;
+            }
+            .card {
+                background: var(--panel);
+                border: 1px solid var(--border);
+                padding: 32px;
+            }
+            .field {
+                margin-bottom: 20px;
+            }
+            label {
+                display: block;
+                font-size: 11px;
+                color: var(--muted);
+                text-transform: uppercase;
+                letter-spacing: 1.5px;
+                margin-bottom: 8px;
+            }
+            input {
+                width: 100%;
+                background: #0d1012;
+                border: 1px solid var(--border);
+                color: var(--text);
+                font-family: "IBM Plex Mono", monospace;
+                font-size: 14px;
+                padding: 10px 14px;
+                outline: none;
+                transition: border-color 0.2s;
+            }
+            input:focus {
+                border-color: var(--green);
+            }
+            .btn {
+                width: 100%;
+                background: var(--green);
+                color: #0a0c0e;
+                border: none;
+                font-family: "IBM Plex Mono", monospace;
+                font-size: 13px;
+                font-weight: 600;
+                padding: 12px;
+                cursor: pointer;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                transition: background 0.2s;
+            }
+            .btn:hover {
+                background: var(--green-dim);
+            }
+            .error {
+                background: rgba(255, 82, 82, 0.1);
+                border: 1px solid rgba(255, 82, 82, 0.3);
+                color: var(--red);
+                font-size: 12px;
+                padding: 10px 14px;
+                margin-bottom: 20px;
+            }
+            .prompt {
+                color: var(--green);
+                margin-right: 6px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="wrap">
+            <div class="logo">
+                <div class="logo-mark"><span>//</span> scriptman</div>
+                <div class="logo-sub">process control</div>
+            </div>
+            <div class="card">
+                {% if error %}
+                <div class="error">{{ error }}</div>
+                {% endif %}
+                <form method="POST">
+                    <div class="field">
+                        <label>Username</label>
+                        <input
+                            type="text"
+                            name="username"
+                            autocomplete="username"
+                            autofocus
+                        />
+                    </div>
+                    <div class="field">
+                        <label>Password</label>
+                        <input
+                            type="password"
+                            name="password"
+                            autocomplete="current-password"
+                        />
+                    </div>
+                    <button class="btn" type="submit">
+                        <span class="prompt">$</span> authenticate
+                    </button>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
