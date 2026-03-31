@@ -343,9 +343,11 @@ def api_stream(script_id):
 
 # ─── TEMPLATES ───────────────────────────────────────────────────────────────
 
-LOGIN_HTML = open("login.html").read()
+base_dir = os.path.dirname(__file__)
 
-INDEX_HTML = open("index.html").read()
+LOGIN_HTML = open(os.path.join(base_dir, "templates", "login.html")).read()
+
+INDEX_HTML = open(os.path.join(base_dir, "templates", "index.html")).read()
 
 # ─── ENTRY ───────────────────────────────────────────────────────────────────
 
