@@ -44,7 +44,7 @@ jobs:
       - name: Create Release and Upload Asset
         uses: softprops/action-gh-release@v1
         with:
-          files: build/monitool.bin
+          files: build/monitool.dist/monitool.bin
           tag_name: ${{ github.ref_name }}
           draft: false
           prerelease: false
