@@ -28,7 +28,6 @@ jobs:
           script-name: monitool.py
           mode: onefile
           include-data-files: templates/*.html=templates/
-          nuitka-version: latest
 
       # Correct output path for onefile
       - name: Upload Artifact
