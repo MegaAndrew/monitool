@@ -6,6 +6,9 @@ on:
       - "v*"
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   pack:
     runs-on: ubuntu-latest
@@ -37,23 +40,12 @@ jobs:
           name: build
           path: monitool.bin
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release and Upload Asset
+        uses: softprops/action-gh-release@v1
         with:
+          files: build/monitool.bin
           tag_name: ${{ github.ref_name }}
-          release_name: Release ${{ github.ref_name }}
           draft: false
           prerelease: false
-
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/monitool.bin
-          asset_name: monitool-linux
-          asset_content_type: application/octet-stream
