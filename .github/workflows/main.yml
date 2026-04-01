@@ -39,7 +39,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build
-          path: build/monitool.bin
+          path: build/monitool.dist/monitool.bin
 
       - name: Create Release and Upload Asset
         uses: softprops/action-gh-release@v1
