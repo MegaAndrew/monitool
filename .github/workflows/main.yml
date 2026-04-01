@@ -25,12 +25,13 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y gcc
+          pip install flask
 
       - name: Build with Nuitka
         uses: Nuitka/Nuitka-Action@main
         with:
           script-name: monitool.py
-          mode: onefile
+          mode: standalone
           include-data-files: templates/*.html=templates/
 
       # Correct output path for onefile
