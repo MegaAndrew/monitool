@@ -199,7 +199,7 @@ def login_page():
             session["username"] = u
             return redirect(url_for("index"))
         error = "Invalid credentials"
-    return render_template_string(open("login.html").read(), error=error)
+    return render_template_string(open("templates/login.html").read(), error=error)
 
 
 @app.route("/logout")
@@ -211,7 +211,7 @@ def logout():
 @app.route("/")
 @login_required
 def index():
-    return render_template_string(open("index.html").read())
+    return render_template_string(open("templates/index.html").read())
 
 
 # ─── API ─────────────────────────────────────────────────────────────────────
