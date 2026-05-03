@@ -638,7 +638,9 @@
                 const resizer = $("sidebar-resizer");
                 if (!container || !resizer) return;
 
-                const savedWidth = Number(localStorage.getItem(sidebarWidthKey));
+                const savedWidth = Number(
+                    localStorage.getItem(sidebarWidthKey),
+                );
                 if (Number.isFinite(savedWidth) && savedWidth > 0) {
                     setSidebarWidth(savedWidth);
                 }
@@ -662,8 +664,9 @@
                         localStorage.setItem(
                             sidebarWidthKey,
                             parseInt(
-                                getComputedStyle(document.documentElement)
-                                    .getPropertyValue("--sidebar-width"),
+                                getComputedStyle(
+                                    document.documentElement,
+                                ).getPropertyValue("--sidebar-width"),
                                 10,
                             ),
                         );
@@ -676,8 +679,9 @@
 
                 window.addEventListener("resize", () => {
                     const currentWidth = parseInt(
-                        getComputedStyle(document.documentElement)
-                            .getPropertyValue("--sidebar-width"),
+                        getComputedStyle(
+                            document.documentElement,
+                        ).getPropertyValue("--sidebar-width"),
                         10,
                     );
                     setSidebarWidth(currentWidth);
@@ -692,10 +696,7 @@
                     minWidth,
                     container.getBoundingClientRect().width - 360,
                 );
-                const nextWidth = Math.min(
-                    Math.max(width, minWidth),
-                    maxWidth,
-                );
+                const nextWidth = Math.min(Math.max(width, minWidth), maxWidth);
 
                 document.documentElement.style.setProperty(
                     "--sidebar-width",
