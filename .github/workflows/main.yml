@@ -33,7 +33,6 @@ jobs:
           script-name: monitool.py
           mode: onefile
           include-data-files: templates/*.html=templates/
-          nuitka-version: latest
           assume-yes-for-downloads: true
 
       - name: Smoke test executable
