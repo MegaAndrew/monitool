@@ -1,10 +1,10 @@
 name: Pack executable
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - "v*"
-  workflow_dispatch:
 
 permissions:
   contents: write
@@ -20,33 +20,61 @@ jobs:
         with:
           python-version: "3.11"
 
-      # Install compiler (required for Nuitka)
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y gcc
-          pip install flask
+          sudo apt-get install -y gcc patchelf
+          python -m pip install --upgrade pip
+          python -m pip install flask
 
       - name: Build with Nuitka
         uses: Nuitka/Nuitka-Action@main
         with:
           script-name: monitool.py
-          mode: standalone
+          mode: onefile
           include-data-files: templates/*.html=templates/
+          nuitka-version: latest
+          assume-yes-for-downloads: true
 
-      # Correct output path for onefile
+      - name: Smoke test executable
+        run: |
+          chmod +x build/monitool.bin
+          tmpdir="$(mktemp -d)"
+          (
+            cd "$tmpdir"
+            MONITOOL_PORT=7019 "$GITHUB_WORKSPACE/build/monitool.bin" >monitool.log 2>&1 &
+            echo $! >monitool.pid
+          )
+          for i in {1..20}; do
+            if curl -fsS http://127.0.0.1:7019/login >/dev/null; then
+              kill "$(cat "$tmpdir/monitool.pid")"
+              wait "$(cat "$tmpdir/monitool.pid")" 2>/dev/null || true
+              exit 0
+            fi
+            sleep 0.5
+          done
+          cat "$tmpdir/monitool.log"
+          kill "$(cat "$tmpdir/monitool.pid")" 2>/dev/null || true
+          exit 1
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build
-          path: build/monitool.dist/monitool.bin
+          name: monitool
+          path: build/monitool.bin
 
-      - name: Create Release and Upload Asset
-        uses: softprops/action-gh-release@v1
-        with:
-          files: build/monitool.dist/monitool.bin
-          tag_name: ${{ github.ref_name }}
-          draft: false
-          prerelease: false
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if gh release view "${{ github.ref_name }}" >/dev/null 2>&1; then
+            gh release upload "${{ github.ref_name }}" \
+              "build/monitool.bin#monitool-linux" \
+              --clobber
+          else
+            gh release create "${{ github.ref_name }}" \
+              "build/monitool.bin#monitool-linux" \
+              --title "Release ${{ github.ref_name }}" \
+              --notes "Automated Nuitka one-file Linux build."
+          fi
